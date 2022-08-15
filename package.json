@@ -1,0 +1,22 @@
+{
+  "name": "fomalhaut1998_picgodemo",
+  "version": "1.0.0",
+  "description": "静态资源仓库",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fomalhaut1998/PicGoDemo.git"
+  },
+  "keywords": [
+    "图床"
+  ],
+  "author": "fomalhaut1998",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fomalhaut1998/PicGoDemo/issues"
+  },
+  "homepage": "https://github.com/fomalhaut1998/PicGoDemo#readme"
+}
