@@ -1,6 +1,6 @@
 {
   "name": "fomalhaut1998_picgodemo",
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "静态资源仓库",
   "main": "index.js",
   "scripts": {
