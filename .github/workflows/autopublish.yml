@@ -1,5 +1,13 @@
 name: Node.js Package
-# 监测图床分支，2020年10月后github新建仓库默认分支改为main，记得更改
+
+# 推送到 main 时自动发布到 npm（版本号已在 npm 上时自动跳过）。
+# 认证走 npm Trusted Publishing (OIDC)，不再需要 NPM_TOKEN 密钥；旧密钥可以删掉。
+# 需先在 https://www.npmjs.com/package/fomalhaut1998_picgodemo/access 配好 Trusted Publisher：
+#   Provider: GitHub Actions
+#   Organization or user: fomalhaut1998
+#   Repository: PicGoDemo
+#   Workflow filename: autopublish.yml
+#   并且要勾选允许直接 npm publish（默认只允许 npm stage publish）
 on:
   push:
     branches:
@@ -8,12 +16,21 @@ on:
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # OIDC 必需
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: "12.x"
-          registry-url: https://registry.npmjs.org/
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          node-version: "24" # 自带 npm >= 11.5.1，Trusted Publishing 的最低要求
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false # 发布流程禁用依赖缓存，避免缓存投毒
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "fomalhaut1998_picgodemo@$VERSION" version >/dev/null 2>&1; then
+            echo "fomalhaut1998_picgodemo@$VERSION 已发布过，跳过。"
+          else
+            npm publish --provenance
+          fi
